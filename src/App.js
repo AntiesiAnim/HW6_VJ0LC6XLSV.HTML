@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import axios from 'axios';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    data: [],
+  };
+
+  getData() {
+    axios
+      .get('https://corona.lmao.ninja/v2/countries/gh')
+      .then((res) => {
+        console.log(res.data);
+        this.setState({ data: res.data });
+      })
+      .catch((err) => {});
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+  render() {
+    return (
+      <div>
+        <h2>Ghana Covid Cases</h2>
+        <table>
+          <tr>
+            <th>Cases</th>
+            <th>Deaths</th>
+            <th>Active</th>
+            <th>Recovered</th>
+          </tr>
+          <tr>
+            <td>{this.state.data.cases}</td>
+            <td>{this.state.data.deaths}</td>
+            <td>{this.state.data.active}</td>
+            <td>{this.state.data.recovered}</td>
+          </tr>
+        </table>
+      </div>
+    );
+  }
 }
 
 export default App;
